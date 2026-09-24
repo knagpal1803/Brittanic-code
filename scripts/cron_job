@@ -1,0 +1,2 @@
+# Execute the Python file monitoring script every 15 minutes as root user
+*/15 * * * * root /usr/bin/python3 /usr/local/bin/script1.py > /dev/null 2>&1
