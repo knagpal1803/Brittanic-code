@@ -1,0 +1,13 @@
+users:
+  - name: alice
+    groups: ["sudo"]
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIalice example"
+  - name: bob
+    groups: ["users"]
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQbob example"
+
+users_remove:
+  - jdoe
+
+users_default_shell: /bin/bash
+
