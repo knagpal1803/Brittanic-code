@@ -1,0 +1,34 @@
+- name: Ensure all mandatory groups exist
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ users | map(attribute='groups') | flatten | unique }}"
+
+- name: Create managed users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | default([]) }}"
+    append: true
+    shell: "{{ users_default_shell }}"
+    create_home: true
+    state: present
+  loop: "{{ users }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Configure SSH authorized keys
+  ansible.builtin.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+    state: present
+  loop: "{{ users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.ssh_key is defined and item.ssh_key | length > 0
+
+- name: Remove decommissioned users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+    remove: true
+  loop: "{{ users_remove }}"
